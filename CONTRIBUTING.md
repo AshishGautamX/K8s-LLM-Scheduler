@@ -1,6 +1,6 @@
 # Contributing to AI Kubernetes Scheduler
 
-Thank you for your interest in contributing! 🎉
+Thank you for your interest in contributing! 
 
 ## How to Contribute
 

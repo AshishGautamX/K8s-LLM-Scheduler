@@ -1,11 +1,11 @@
-# 🧪 Complete Testing Guide
+#  Complete Testing Guide
 
 ## Current Status
-- ✅ All dependencies installed
-- ✅ Environment configured (HuggingFace token set)
-- ✅ Kubernetes cluster running (3 nodes)
-- ✅ Code fixed (timeout parameter removed)
-- ✅ Old test pods cleaned up
+-  All dependencies installed
+-  Environment configured (HuggingFace token set)
+-  Kubernetes cluster running (3 nodes)
+-  Code fixed (timeout parameter removed)
+-  Old test pods cleaned up
 
 ## How to Run Complete Test
 
@@ -37,8 +37,8 @@
    
    Wait for:
    ```
-   ✅ Scheduler initialized successfully!
-   👀 Watching for pods with schedulerName=ai-llama-scheduler
+    Scheduler initialized successfully!
+    Watching for pods with schedulerName=ai-llama-scheduler
    ```
 
 2. **Terminal 2 - Create Test Pods**:
@@ -52,11 +52,11 @@
 
 3. **Watch the scheduler logs** in Terminal 1 for:
    ```
-   📦 Detected pod: default/ai-test-pod-X
-   🤖 Calling HuggingFace Llama-3.3-70B for scheduling decision...
-   ✅ LLM decision: minikube-mXX (confidence: 0.XX)
-   💭 Reasoning: <AI's reasoning>
-   ✅ Bound pod default/ai-test-pod-X to node minikube-mXX
+    Detected pod: default/ai-test-pod-X
+    Calling HuggingFace Llama-3.3-70B for scheduling decision...
+    LLM decision: minikube-mXX (confidence: 0.XX)
+    Reasoning: <AI's reasoning>
+    Bound pod default/ai-test-pod-X to node minikube-mXX
    ```
 
 4. **Check pod status**:
@@ -66,14 +66,14 @@
 
 ## What to Look For
 
-### ✅ Success Indicators:
-- Scheduler logs show: "🤖 Calling HuggingFace Llama-3.3-70B..."
+###  Success Indicators:
+- Scheduler logs show: " Calling HuggingFace Llama-3.3-70B..."
 - No error messages about timeout
 - Pods show "Running" status
 - Pods are distributed across nodes
 - LLM provides reasoning for decisions
 
-### ❌ Failure Indicators:
+###  Failure Indicators:
 - "Using fallback" messages (means LLM call failed)
 - Timeout errors
 - Pods stuck in "Pending"
@@ -83,22 +83,22 @@
 
 ### Scheduler Terminal:
 ```
-🚀 AI-Powered Kubernetes Scheduler with Llama-3.3-70B
+ AI-Powered Kubernetes Scheduler with Llama-3.3-70B
 ============================================================
 Using HuggingFace Inference API
 Model: meta-llama/Llama-3.3-70B-Instruct
 ============================================================
-✅ Initialized HuggingFace client for model: meta-llama/Llama-3.3-70B-Instruct
-📡 Endpoint: https://router.huggingface.co
-✅ Connected to Kubernetes cluster
-👀 Watching for pods with schedulerName=ai-llama-scheduler
+ Initialized HuggingFace client for model: meta-llama/Llama-3.3-70B-Instruct
+ Endpoint: https://router.huggingface.co
+ Connected to Kubernetes cluster
+ Watching for pods with schedulerName=ai-llama-scheduler
 
 ============================================================
-📦 Detected pod: default/ai-test-pod-1
-🤖 Calling HuggingFace Llama-3.3-70B for scheduling decision...
-✅ LLM decision: minikube-m03 (confidence: 0.85)
-💭 Reasoning: Selected minikube-m03 due to lowest resource utilization...
-✅ Bound pod default/ai-test-pod-1 to node minikube-m03
+ Detected pod: default/ai-test-pod-1
+ Calling HuggingFace Llama-3.3-70B for scheduling decision...
+ LLM decision: minikube-m03 (confidence: 0.85)
+ Reasoning: Selected minikube-m03 due to lowest resource utilization...
+ Bound pod default/ai-test-pod-1 to node minikube-m03
 ============================================================
 ```
 
@@ -150,11 +150,11 @@ kubectl delete -f ai-test-pods.yaml
 ## Next Steps After Testing
 
 Once testing is successful:
-1. ✅ Commit to Git
-2. ✅ Push to GitHub
-3. ✅ Share with community
-4. ✅ Deploy to production cluster (optional)
+1.  Commit to Git
+2.  Push to GitHub
+3.  Share with community
+4.  Deploy to production cluster (optional)
 
 ---
 
-**Ready to test!** 🚀
+**Ready to test!** 

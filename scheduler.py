@@ -113,7 +113,7 @@ class ContextManager:
         try:
             config.load_kube_config()
             self.v1 = client.CoreV1Api()
-            logger.info("✅ Connected to Kubernetes cluster")
+            logger.info(" Connected to Kubernetes cluster")
         except Exception as e:
             logger.error(f"Failed to load kubeconfig: {e}")
             raise
@@ -368,10 +368,10 @@ class HuggingFaceClient:
     def _verify_connection(self):
         """Verify connection to HuggingFace service"""
         try:
-            logger.info(f"✅ Initialized HuggingFace client for model: {self.model}")
-            logger.info(f"📡 Endpoint: {self.endpoint}")
+            logger.info(f" Initialized HuggingFace client for model: {self.model}")
+            logger.info(f" Endpoint: {self.endpoint}")
         except Exception as e:
-            logger.error(f"❌ Cannot initialize HuggingFace client: {e}")
+            logger.error(f" Cannot initialize HuggingFace client: {e}")
             raise
     
     def get_scheduling_decision(self, prompt: str, pod_spec: 'PodSpec', node_metrics: List['NodeMetrics']) -> SchedulingDecision:
@@ -381,7 +381,7 @@ class HuggingFaceClient:
             cached_decision = self.cache.get(pod_spec, node_metrics)
             if cached_decision:
                 self.stats["cached_requests"] += 1
-                logger.info("📦 Using cached decision")
+                logger.info(" Using cached decision")
                 return cached_decision
         
         self.stats["total_requests"] += 1
@@ -403,7 +403,7 @@ class HuggingFaceClient:
             except Exception as e:
                 if "Circuit breaker is OPEN" in str(e):
                     self.stats["circuit_breaker_trips"] += 1
-                    logger.warning("⚡ Circuit breaker is OPEN, using fallback")
+                    logger.warning(" Circuit breaker is OPEN, using fallback")
                     return self._fallback_decision(node_metrics, "Circuit breaker open")
                 
                 if attempt < MAX_RETRIES - 1:
@@ -601,11 +601,11 @@ class IntegrationLayer:
                 _preload_content=False
             )
             
-            logger.info(f"✅ Bound pod {namespace}/{pod_name} to node {node_name}")
+            logger.info(f" Bound pod {namespace}/{pod_name} to node {node_name}")
             return True
             
         except ApiException as e:
-            logger.error(f"❌ Error binding pod {pod_name} to node {node_name}: {e}")
+            logger.error(f" Error binding pod {pod_name} to node {node_name}: {e}")
             if e.body:
                 try:
                     error_body = json.loads(e.body)
@@ -614,7 +614,7 @@ class IntegrationLayer:
                     logger.error(f"API Error Body: {e.body}")
             return False
         except Exception as e:
-            logger.error(f"❌ Unexpected error binding pod: {e}")
+            logger.error(f" Unexpected error binding pod: {e}")
             import traceback
             traceback.print_exc()
             return False
@@ -642,14 +642,14 @@ class CustomScheduler:
     async def start(self):
         """Start the scheduler service"""
         self.running = True
-        logger.info(f"🚀 Starting {self.scheduler_name}...")
-        logger.info(f"📡 Watching for pods with schedulerName={self.scheduler_name}")
+        logger.info(f" Starting {self.scheduler_name}...")
+        logger.info(f" Watching for pods with schedulerName={self.scheduler_name}")
         await self._watch_pods()
     
     def stop(self):
         """Stop the scheduler service"""
         self.running = False
-        logger.info("⏹️  Scheduler stopped")
+        logger.info("⏹  Scheduler stopped")
     
     async def _watch_pods(self):
         """Watch for pods that need scheduling"""
@@ -657,7 +657,7 @@ class CustomScheduler:
             v1 = client.CoreV1Api()
             w = watch.Watch()
             
-            logger.info(f"👀 Watching for unscheduled pods...")
+            logger.info(f" Watching for unscheduled pods...")
             
             while self.running:
                 try:
@@ -676,7 +676,7 @@ class CustomScheduler:
                             pod.spec.node_name is None):
                             
                             logger.info(f"\n{'='*60}")
-                            logger.info(f"📦 Detected pod: {pod.metadata.namespace}/{pod.metadata.name}")
+                            logger.info(f" Detected pod: {pod.metadata.namespace}/{pod.metadata.name}")
                             await self._schedule_pod(pod)
                             logger.info(f"{'='*60}\n")
                 
@@ -693,24 +693,24 @@ class CustomScheduler:
         node_metrics = self.context_manager.get_node_metrics()
         
         if not node_metrics:
-            logger.error("❌ No available nodes")
+            logger.error(" No available nodes")
             return
         
         # Construct prompt
         prompt = self.prompt_engine.construct_scheduling_prompt(pod_spec, node_metrics)
         
         # Get decision from HuggingFace LLM
-        logger.info("🤖 Calling HuggingFace Llama-3.3-70B for scheduling decision...")
+        logger.info(" Calling HuggingFace Llama-3.3-70B for scheduling decision...")
         decision = self.llm_client.get_scheduling_decision(prompt, pod_spec, node_metrics)
         
         if decision.fallback_needed:
             self.stats["fallback_decisions"] += 1
-            logger.warning(f"⚠️  Using fallback: {decision.reasoning}")
+            logger.warning(f"  Using fallback: {decision.reasoning}")
         else:
             self.stats["llm_decisions"] += 1
-            logger.info(f"✅ LLM decision: {decision.selected_node} (confidence: {decision.confidence:.2f})")
+            logger.info(f" LLM decision: {decision.selected_node} (confidence: {decision.confidence:.2f})")
         
-        logger.info(f"💭 Reasoning: {decision.reasoning}")
+        logger.info(f" Reasoning: {decision.reasoning}")
         
         # Bind pod to node
         if decision.selected_node:
@@ -725,7 +725,7 @@ class CustomScheduler:
             else:
                 self.stats["failed_bindings"] += 1
         else:
-            logger.error("❌ No node selected")
+            logger.error(" No node selected")
             self.stats["failed_bindings"] += 1
     
     def _convert_pod_to_spec(self, pod) -> PodSpec:
@@ -774,7 +774,7 @@ class CustomScheduler:
 # ============================================================================
 async def main():
     """Main function to run the AI scheduler"""
-    print("🚀 AI-Powered Kubernetes Scheduler with Llama-3.3-70B")
+    print(" AI-Powered Kubernetes Scheduler with Llama-3.3-70B")
     print("=" * 60)
     print("Using HuggingFace Inference API")
     print(f"Model: {LLM_MODEL}")
@@ -784,17 +784,17 @@ async def main():
     scheduler = CustomScheduler(SCHEDULER_NAME)
     
     try:
-        print("\n✅ Scheduler initialized successfully!")
-        print(f"👀 Watching for pods with schedulerName={SCHEDULER_NAME}")
+        print("\n Scheduler initialized successfully!")
+        print(f" Watching for pods with schedulerName={SCHEDULER_NAME}")
         print("\nPress Ctrl+C to stop...\n")
         
         # Start scheduler
         await scheduler.start()
         
     except KeyboardInterrupt:
-        print("\n\n⏹️  Scheduler stopped by user")
+        print("\n\n⏹  Scheduler stopped by user")
     except Exception as e:
-        print(f"\n❌ Error: {e}")
+        print(f"\n Error: {e}")
         import traceback
         traceback.print_exc()
     finally:
@@ -802,7 +802,7 @@ async def main():
         
         # Print final statistics
         print("\n" + "=" * 60)
-        print("📊 Final Statistics:")
+        print(" Final Statistics:")
         print("=" * 60)
         stats = scheduler.get_stats()
         print(f"Total Scheduled: {stats['total_scheduled']}")

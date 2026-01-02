@@ -19,25 +19,25 @@ def run_command(cmd, check=True):
     return result.stdout
 
 def main():
-    print("🧪 AI Scheduler Test Runner")
+    print(" AI Scheduler Test Runner")
     print("=" * 60)
     
     # Load kubeconfig
     try:
         config.load_kube_config()
         v1 = client.CoreV1Api()
-        print("✅ Connected to Kubernetes cluster")
+        print(" Connected to Kubernetes cluster")
     except Exception as e:
-        print(f"❌ Failed to connect to Kubernetes: {e}")
+        print(f" Failed to connect to Kubernetes: {e}")
         sys.exit(1)
     
     # Clean up any existing test pods
-    print("\n🧹 Cleaning up existing test pods...")
+    print("\n Cleaning up existing test pods...")
     run_command("kubectl delete -f ai-test-pods.yaml --ignore-not-found=true", check=False)
     time.sleep(2)
     
     # Create test pods
-    print("\n📦 Creating test pods...")
+    print("\n Creating test pods...")
     run_command("kubectl apply -f ai-test-pods.yaml")
     
     # Wait for scheduling
@@ -45,7 +45,7 @@ def main():
     time.sleep(30)
     
     # Check pod status
-    print("\n📊 Pod Status:")
+    print("\n Pod Status:")
     print("-" * 60)
     
     pods = v1.list_namespaced_pod(namespace="default")
@@ -58,20 +58,20 @@ def main():
         
         if pod.spec.node_name:
             scheduled_count += 1
-            status_icon = "✅"
+            status_icon = ""
         else:
             status_icon = "⏳"
         
         print(f"{status_icon} {pod.metadata.name:20} | Status: {status:10} | Node: {node}")
     
     print("-" * 60)
-    print(f"\n📈 Results: {scheduled_count}/{len(test_pods)} pods scheduled")
+    print(f"\n Results: {scheduled_count}/{len(test_pods)} pods scheduled")
     
     if scheduled_count == len(test_pods):
-        print("✅ All pods successfully scheduled!")
+        print(" All pods successfully scheduled!")
         return 0
     else:
-        print("⚠️  Some pods not scheduled yet. Check scheduler logs.")
+        print("  Some pods not scheduled yet. Check scheduler logs.")
         return 1
 
 if __name__ == "__main__":
