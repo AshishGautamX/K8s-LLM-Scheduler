@@ -1,0 +1,23 @@
+# AI Kubernetes Scheduler - Dependencies
+# Python 3.8+
+
+# Kubernetes client
+kubernetes>=28.1.0
+
+# HuggingFace Inference API
+huggingface-hub>=0.20.0
+
+# HTTP requests
+requests>=2.31.0
+
+# Configuration management
+pyyaml>=6.0.1
+
+# Data validation
+pydantic>=2.5.0
+
+# Async support
+aiohttp>=3.9.0
+
+# Utilities
+python-dotenv>=1.0.0

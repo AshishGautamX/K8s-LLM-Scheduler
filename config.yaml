@@ -1,0 +1,43 @@
+# Scheduler Configuration
+scheduler:
+  name: ai-llama-scheduler
+  watch_interval: 60  # seconds
+  
+# LLM Configuration
+llm:
+  model: meta-llama/Llama-3.3-70B-Instruct
+  endpoint: https://router.huggingface.co
+  timeout: 60  # seconds
+  max_retries: 3
+  retry_delay: 2  # seconds
+  temperature: 0.3
+  max_tokens: 200
+  
+# Cache Configuration
+cache:
+  enabled: true
+  ttl: 300  # seconds (5 minutes)
+  max_size: 100  # maximum cached decisions
+  
+# Logging Configuration
+logging:
+  level: INFO  # DEBUG, INFO, WARNING, ERROR
+  format: json  # json or text
+  file: scheduler.log
+  
+# Metrics Configuration
+metrics:
+  enabled: true
+  port: 9090
+  
+# Fallback Configuration
+fallback:
+  enabled: true
+  strategy: resource_balanced  # resource_balanced, least_loaded, round_robin
+  
+# Circuit Breaker Configuration
+circuit_breaker:
+  enabled: true
+  failure_threshold: 5
+  timeout: 60  # seconds
+  half_open_max_calls: 3
