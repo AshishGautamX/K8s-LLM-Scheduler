@@ -1,46 +1,46 @@
-#  AI-Powered Kubernetes Scheduler with Llama-3.3-70B
+# AI-Powered Kubernetes Scheduler with Llama-3.3-70B
 
 An intelligent Kubernetes scheduler that uses **Meta's Llama-3.3-70B-Instruct** model via HuggingFace Inference API to make smart pod placement decisions based on real-time cluster metrics.
 
-##  Features
+## Features
 
-- ** LLM-Powered Scheduling**: Uses Llama-3.3-70B for intelligent node selection
-- ** Request Caching**: Avoids redundant API calls for similar scheduling decisions
-- ** Retry Logic**: Exponential backoff for failed API requests
-- ** Circuit Breaker**: Prevents cascading failures during API outages
-- ** Metrics & Monitoring**: Comprehensive statistics and performance tracking
-- ** Smart Fallback**: Multiple fallback strategies when LLM is unavailable
-- ** Configurable**: YAML-based configuration for easy customization
+- **LLM-Powered Scheduling**: Uses Llama-3.3-70B for intelligent node selection
+- **Request Caching**: Avoids redundant API calls for similar scheduling decisions
+- **Retry Logic**: Exponential backoff for failed API requests
+- **Circuit Breaker**: Prevents cascading failures during API outages
+- **Metrics & Monitoring**: Comprehensive statistics and performance tracking
+- **Smart Fallback**: Multiple fallback strategies when LLM is unavailable
+- **Configurable**: YAML-based configuration for easy customization
 
-##  Architecture
-
-```
-
-  Unscheduled    
-     Pods        
-
-         
-         v
-      
-   AI Scheduler    HuggingFace API 
-  (scheduler.py)         Llama-3.3-70B   
-      
-         
-         v
-
-  Kubernetes     
-  Nodes          
+## Architecture
 
 ```
+┌──────────────┐
+│ Unscheduled  │
+│    Pods      │
+└──────┬───────┘
+       │
+       v
+┌──────────────┐     ┌─────────────────┐
+│ AI Scheduler │────>│ HuggingFace API │
+│(scheduler.py)│     │ Llama-3.3-70B   │
+└──────┬───────┘     └─────────────────┘
+       │
+       v
+┌──────────────┐
+│ Kubernetes   │
+│   Nodes      │
+└──────────────┘
+```
 
-##  Prerequisites
+## Prerequisites
 
 - **Python 3.8+**
 - **Kubernetes cluster** (Minikube, Kind, or production cluster)
 - **HuggingFace API token** ([Get one here](https://huggingface.co/settings/tokens))
 - **kubectl** configured to access your cluster
 
-##  Quick Start
+## Quick Start
 
 ### 1. Clone and Install
 
@@ -82,15 +82,15 @@ python scheduler.py
 
 You should see:
 ```
- AI-Powered Kubernetes Scheduler with Llama-3.3-70B
+AI-Powered Kubernetes Scheduler with Llama-3.3-70B
 ============================================================
 Using HuggingFace Inference API
 Model: meta-llama/Llama-3.3-70B-Instruct
 ============================================================
- Initialized HuggingFace client for model: meta-llama/Llama-3.3-70B-Instruct
- Endpoint: https://router.huggingface.co
- Connected to Kubernetes cluster
- Watching for pods with schedulerName=ai-llama-scheduler
+Initialized HuggingFace client for model: meta-llama/Llama-3.3-70B-Instruct
+Endpoint: https://router.huggingface.co
+Connected to Kubernetes cluster
+Watching for pods with schedulerName=ai-llama-scheduler
 ```
 
 ### 5. Test with Sample Pods
@@ -104,7 +104,7 @@ kubectl apply -f ai-test-pods.yaml
 kubectl get pods -o wide
 ```
 
-##  Configuration
+## Configuration
 
 Edit `config.yaml` to customize scheduler behavior:
 
@@ -128,20 +128,20 @@ circuit_breaker:
   timeout: 60
 ```
 
-##  Project Structure
+## Project Structure
 
 ```
 AI-Cloud-Scheduling/
- scheduler.py           # Main scheduler implementation
- config.yaml           # Configuration file
- requirements.txt      # Python dependencies
- .env.example         # Environment variables template
- .gitignore           # Git ignore rules
- ai-test-pods.yaml    # Sample test pods
- README.md            # This file
+├── scheduler.py           # Main scheduler implementation
+├── config.yaml           # Configuration file
+├── requirements.txt      # Python dependencies
+├── .env.example         # Environment variables template
+├── .gitignore           # Git ignore rules
+├── ai-test-pods.yaml    # Sample test pods
+└── README.md            # This file
 ```
 
-##  Environment Variables
+## Environment Variables
 
 | Variable | Description | Default |
 |----------|-------------|---------|
@@ -152,7 +152,7 @@ AI-Cloud-Scheduling/
 | `LOG_LEVEL` | Logging level | `INFO` |
 | `LOG_FORMAT` | Log format (text/json) | `text` |
 
-##  How It Works
+## How It Works
 
 1. **Pod Detection**: Scheduler watches for pods with `schedulerName: ai-llama-scheduler`
 2. **Context Collection**: Gathers real-time metrics from all cluster nodes
@@ -162,7 +162,7 @@ AI-Cloud-Scheduling/
 6. **Binding**: Binds the pod to the selected node
 7. **Caching**: Caches decision for similar future requests
 
-##  Fallback Strategies
+## Fallback Strategies
 
 When the LLM is unavailable, the scheduler uses configurable fallback strategies:
 
@@ -170,7 +170,7 @@ When the LLM is unavailable, the scheduler uses configurable fallback strategies
 - **`least_loaded`**: Selects node with lowest resource usage
 - **`round_robin`**: Distributes pods evenly across nodes
 
-##  Monitoring
+## Monitoring
 
 The scheduler tracks comprehensive metrics:
 
@@ -183,7 +183,7 @@ The scheduler tracks comprehensive metrics:
 
 Access stats in the logs or extend with Prometheus metrics.
 
-##  Troubleshooting
+## Troubleshooting
 
 ### "HUGGINGFACE_TOKEN environment variable is required"
 - Get a token from https://huggingface.co/settings/tokens
@@ -203,18 +203,18 @@ Access stats in the logs or extend with Prometheus metrics.
 - Check pod has correct `schedulerName: ai-llama-scheduler`
 - View scheduler logs for errors
 
-##  Security Best Practices
+## Security Best Practices
 
 - **Never commit `.env` file** to version control
 - Store HuggingFace token securely (use secrets management in production)
 - Use RBAC to limit scheduler permissions
 - Monitor API usage to avoid rate limits
 
-##  License
+## License
 
 MIT License - See LICENSE file for details
 
-##  Contributing
+## Contributing
 
 Contributions welcome! Please:
 1. Fork the repository
@@ -222,13 +222,13 @@ Contributions welcome! Please:
 3. Make your changes
 4. Submit a pull request
 
-##  Additional Resources
+## Additional Resources
 
 - [HuggingFace Inference API Docs](https://huggingface.co/docs/api-inference/)
 - [Kubernetes Scheduler Documentation](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/)
 - [Llama-3.3-70B Model Card](https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct)
 
-##  Acknowledgments
+## Acknowledgments
 
 - Meta AI for Llama-3.3-70B model
 - HuggingFace for Inference API
@@ -236,4 +236,4 @@ Contributions welcome! Please:
 
 ---
 
-**Made with  using AI-powered scheduling**
+**Made with AI-powered scheduling**
